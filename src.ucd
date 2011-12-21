@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<editmodel:ClassDiagramEditModel xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:editmodel="editmodel.xmi" xmlns:options="options.xmi" name="src" size="1021,582" id="" metadata="uml2-1.0" initialized="true" scrolledY="50" tag="10" key="32303037303533312D3130204C616231">
+  <children xsi:type="editmodel:ClassEditModel" name="proxyServer" location="195,19" size="140,103" id="/proxyServer" runTimeClassModel="main([Ljava.lang.String;),errorLogger,m_port">
+    <children xsi:type="editmodel:CompartmentEditModel" size="117,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="errorLogger" id="/proxyServer#errorLogger"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="m_port" id="/proxyServer#m_port"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="86,18">
+      <children xsi:type="editmodel:MethodEditModel" name="main" id="/proxyServer#main([Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="/proxyServer->Soyatec::Import" source="//@children.0" target="//@children.1" targetEnd="//@children.0/@sourceConnections.0/@children.2" label="//@children.0/@sourceConnections.0/@children.0" sourceEnd="//@children.0/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import, Call, Instantiate»" size="119,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="43,103" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="103,0"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="/proxyServer-Standard::Instantiate->/ProxyReciver" source="//@children.0" target="//@children.4" targetEnd="//@children.0/@sourceConnections.1/@children.2" label="//@children.0/@sourceConnections.1/@children.0" sourceEnd="//@children.0/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Instantiate»" size="61,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="140,87" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,16"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.0 //@children.4/@sourceConnections.0 //@children.3/@sourceConnections.0 //@children.2/@sourceConnections.0" name="Logger" location="135,345" size="148,157" id="/Logger" runTimeClassModel="Logger(Ljava.io.PrintStream;),logTo,log(Ljava.lang.String;),log(Ljava.lang.Exception;Ljava.lang.String;),Logger(),log(Ljava.lang.Exception;)">
+    <children xsi:type="editmodel:CompartmentEditModel" size="105,18">
+      <children xsi:type="editmodel:AttributeEditModel" name="logTo" location="18,27" id="/Logger#logTo"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="125,90">
+      <children xsi:type="editmodel:MethodEditModel" name="Logger" id="/Logger#Logger()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="Logger" id="/Logger#Logger(Ljava.io.PrintStream;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="log" id="/Logger#log(Ljava.lang.String;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="log" id="/Logger#log(Ljava.lang.Exception;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="log" id="/Logger#log(Ljava.lang.Exception;Ljava.lang.String;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showProtectedMethods="true" showPublicMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" name="RequestHeadersPresentor" location="795,372" size="314,139" id="/RequestHeadersPresentor" runTimeClassModel="process(),logger,in,RequestHeadersPresentor(Ljava.io.BufferedReader;Ljava.io.PrintWriter;),out">
+    <children xsi:type="editmodel:CompartmentEditModel" size="111,54">
+      <children xsi:type="editmodel:AttributeEditModel" name="logger" id="/RequestHeadersPresentor#logger"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="in" id="/RequestHeadersPresentor#in"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="out" id="/RequestHeadersPresentor#out"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="291,36">
+      <children xsi:type="editmodel:MethodEditModel" name="process" id="/RequestHeadersPresentor#procces(Ljava.io.BufferedReader;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="RequestHeadersPresentor" id="/RequestHeadersPresentor#RequestHeadersPresentor(Ljava.io.BufferedReader;)"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="/RequestHeadersPresentor-Soyatec::Import->/Logger" source="//@children.2" target="//@children.1" targetEnd="//@children.2/@sourceConnections.0/@children.2" label="//@children.2/@sourceConnections.0/@children.0" sourceEnd="//@children.2/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import»" size="41,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,64" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="148,91"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showProtectedMethods="true" showPublicMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.4/@sourceConnections.1" name="RequestHandler" location="465,270" size="163,139" id="/RequestHandler" runTimeClassModel="m_logger,run(),RequestHandler(Ljava.net.Socket;),m_socket">
+    <children xsi:type="editmodel:CompartmentEditModel" size="104,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="m_socket" id="/RequestHandler#m_socket"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="m_logger" id="/RequestHandler#m_logger"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="140,54">
+      <children xsi:type="editmodel:MethodEditModel" name="RequestHandler" id="/RequestHandler#RequestHandler(Ljava.net.Socket;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="run" id="/RequestHandler#run()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="readRequest" id="/RequestHandler#readRequest()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="/RequestHandler->Standard::Instantiate" source="//@children.3" target="//@children.1" targetEnd="//@children.3/@sourceConnections.0/@children.2" label="//@children.3/@sourceConnections.0/@children.0" sourceEnd="//@children.3/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import, Call, Instantiate»" size="119,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,106" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="148,31"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="/RequestHandler-Soyatec::Implement->java.lang/Runnable" source="//@children.3" target="//@children.5" targetEnd="//@children.3/@sourceConnections.1/@children.2" label="//@children.3/@sourceConnections.1/@children.0" sourceEnd="//@children.3/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Implement»" size="59,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="163,19" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,71"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showProtectedMethods="true" showPublicMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.0/@sourceConnections.1" name="ProxyReciver" location="474,90" size="129,121" id="/ProxyReciver" runTimeClassModel="m_logger,ProxyReciver(I),run(),m_port">
+    <children xsi:type="editmodel:CompartmentEditModel" size="103,36">
+      <children xsi:type="editmodel:AttributeEditModel" name="m_port" id="/ProxyReciver#m_port"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="m_logger" id="/ProxyReciver#m_logger"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="106,36">
+      <children xsi:type="editmodel:MethodEditModel" name="ProxyReciver" location="11,74" id="/ProxyReciver#ProxyReciver(I)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="run" id="/ProxyReciver#run()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="/ProxyReciver->Soyatec::Import" source="//@children.4" target="//@children.1" targetEnd="//@children.4/@sourceConnections.0/@children.2" label="//@children.4/@sourceConnections.0/@children.0" sourceEnd="//@children.4/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import, Call, Instantiate»" size="119,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,113" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="148,17"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="/ProxyReciver->Standard::Instantiate" source="//@children.4" target="//@children.3" targetEnd="//@children.4/@sourceConnections.1/@children.2" label="//@children.4/@sourceConnections.1/@children.0" sourceEnd="//@children.4/@sourceConnections.1/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Import, Instantiate»" size="96,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="64,121" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="73,0"/>
+    </sourceConnections>
+    <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="/ProxyReciver-Soyatec::Implement->java.lang/Runnable" source="//@children.4" target="//@children.5" targetEnd="//@children.4/@sourceConnections.2/@children.2" label="//@children.4/@sourceConnections.2/@children.0" sourceEnd="//@children.4/@sourceConnections.2/@children.1" connectionRouterKind="Manual">
+      <children xsi:type="editmodel:WireLabelEditModel" name="«Implement»" size="59,14" anchorKind="MiddlePart"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="129,101" attachSource="true"/>
+      <children xsi:type="editmodel:AssociationEndEditModel" location="0,19"/>
+    </sourceConnections>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showProtectedMethods="true" showPublicMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAssociationMember="true"/>
+  </children>
+  <children xsi:type="editmodel:InterfaceEditModel" targetConnections="//@children.4/@sourceConnections.2 //@children.3/@sourceConnections.1" name="Runnable" location="705,172" size="103,81" id="java.lang/Runnable" runTimeClassModel="run()">
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <children xsi:type="editmodel:CompartmentEditModel" size="46,18">
+      <children xsi:type="editmodel:MethodEditModel" name="run" id="java.lang/Runnable#run()"/>
+    </children>
+    <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
+    <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showProtectedMethods="true" showPublicMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAssociationMember="true"/>
+  </children>
+  <diagramOptions xsi:type="options:ClassDiagramOptions" interactive="false" level="-1" showScope="InPackage" properties="libraryFilter=;ModelFrozen=true;ComputedContent=true;displayOptions=1;open=/RequestHandler,/Logger,/ProxyReciver,/RequestHeadersPresentor,/proxyServer;Product=eDepend;link=/proxyServer-Soyatec::Import->/Logger,/RequestHandler-Soyatec::Import->/RequestHeadersPresentor,/ProxyReciver-Soyatec::Import->/Logger,/RequestHandler-Standard::Instantiate->/Logger,/RequestHandler-Standard::Instantiate->/RequestHeadersPresentor,/RequestHandler-Standard::Call->/Logger,/RequestHandler-Standard::Call->/RequestHeadersPresentor,/ProxyReciver-Standard::Instantiate->/Logger,/proxyServer-Standard::Instantiate->/ProxyReciver,/ProxyReciver-Standard::Instantiate->/RequestHandler,/proxyServer-Standard::Call->/Logger,/ProxyReciver-Soyatec::Import->/RequestHandler,/proxyServer-Standard::Instantiate->/Logger,/ProxyReciver-Standard::Call->/Logger,/RequestHandler-Soyatec::Import->/Logger;dependencyFilter=Standard::Derive,Soyatec::Implement,Standard::Instantiate,Standard::Create,Standard::Call,Standard::Send,Soyatec::Access,Soyatec::Import,;wireOptions=4"/>
+  <boardSetting snapToGeometry="true" gridEnabled="true" gridSpacing="15,15" gridOrigin="0,0" rulerUnit="pixel" gridVisibility="false">
+    <leftRuler/>
+    <topRuler/>
+  </boardSetting>
+  <classDiagramPreferences xsi:type="editmodel:UMLClassDiagramPreference" showPopupBars="true" showConnectionHandles="true" attributeSorter="Natural" methodSorter="Natural" shortPackageNameFormat="true" showDependencyStereotype="true" showEnumerationStereotype="false" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showProtectedMethods="true" showPublicMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAssociationMember="true"/>
+</editmodel:ClassDiagramEditModel>
