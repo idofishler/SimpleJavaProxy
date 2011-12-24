@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.sql.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
@@ -15,19 +15,10 @@ public class RequestHeadersPresentor {
 	private static final String PROTOCOL = "protocol";
 	
 	private BufferedReader in;
-	private PrintWriter out;
 	private static Logger m_logger = new Logger();
-
-	// TODO: remove???
-	public RequestHeadersPresentor(BufferedReader inputStream,
-			PrintWriter outputStream) {
-		in = inputStream;
-		out = outputStream;
-	}
 	
 	public RequestHeadersPresentor(BufferedReader inputStream) {
 		in = inputStream;
-		out = null;
 	}
 
 	public String procces() throws MalformedURLException {
@@ -35,17 +26,27 @@ public class RequestHeadersPresentor {
 		
 		Hashtable<String, String> headers = getRequestHeaders();
 		URL url = new URL(headers.get(URL));
+		int requestLength = in.toString().getBytes().length;
 		
-		result.append("<html><body>\n")
+		// Response headers
+		result.append(headers.get(PROTOCOL) + " 200 OK\n")
+		.append("Date: " + (new Date(System.currentTimeMillis())) + "\n")
+		.append("Content-Type: text/html\n");
+		
+		// Response data
+		result.append("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\">\n")
 		.append("<!-- Ido Fisler & Dor Tumarkin -->\n")
-		.append("Used HTTP Request Method: " + headers.get(METHOD) + "<BR>\n")
-		.append("Browser sent a request to: " + url.getHost() + "<BR>\n")
-		.append("Request Protocol: " + headers.get(PROTOCOL) + "<BR>\n")
-		.append("Resource Requested: " + url.getPath() + "<BR>\n")
-		.append("Parameters:<BR>\n")
+		.append("<html><body>\n")
+		.append("<H3>Used HTTP Request Method: " + headers.get(METHOD) + "</H3><BR>\n")
+		.append("<H3>Browser sent a request to: " + url.getHost() + "</H3><BR>\n")
+		.append("<H3>Request Protocol: " + headers.get(PROTOCOL) + "</H3><BR>\n")
+		.append("<H3>Resource Requested: " + url.getPath() + "</H3><BR>\n")
+		.append("<B>Parameters:</B><BR>\n")
 		.append(getParametersTable(url))
-		.append("HTTP Headers:<BR>\n")
+		.append("<B>HTTP Headers:</B><BR>\n")
 		.append(getHeadersTable(headers))
+		.append("<B>Data: the request contains </B>" + requestLength + " bytes.<BR>\n")
+		.append("<B>Request query: </B>" + url.getQuery() + "<BR>\n")
 		.append("</body></html>");
 
 		// debug
@@ -71,7 +72,7 @@ public class RequestHeadersPresentor {
 					result.put(URL, firstLineArgs[1]);
 					result.put(PROTOCOL, firstLineArgs[2]);
 				} else {
-					String[] parametr = inputLine.split(" ");
+					String[] parametr = inputLine.split(": ");
 					if (parametr.length == 2) {
 						result.put(parametr[0], parametr[1]);						
 					} else {
@@ -98,7 +99,7 @@ public class RequestHeadersPresentor {
 		Enumeration<String> parameters = headers.keys();
 		
 		result.append("<TABLE BORDER=1>\n" +
-				"<TR>\n" +
+				"<TR BGCOLOR=\"#FFAD00\">\n" +
                 "<TH>Pareameter Name<TH>Parameter Value");
 	
 		while (parameters.hasMoreElements()) {
@@ -123,7 +124,7 @@ public class RequestHeadersPresentor {
 		if (query != null) {
 			StringTokenizer tokenizer = new StringTokenizer(query, "&");
 			result.append("<TABLE BORDER=1>\n" +
-				"<TR>\n" +
+				"<TR BGCOLOR=\"#FFAD00\">\n" +
                 "<TH>Pareameter Name<TH>Parameter Value");
 			while (tokenizer.hasMoreElements()) {
 				String param = tokenizer.nextToken();
