@@ -23,13 +23,8 @@ public class proxyServer {
 		//String policyFileName = args[1];
 		// TODO: open the policy file and read it...
 		
-		Thread mainReciverThread = new Thread(new ProxyReciver(m_port));
-		mainReciverThread.start();
-		try {
-			mainReciverThread.join();
-		} catch (InterruptedException e) {
-			errorLogger.log(e);
-		}
+		ProxyReciver listener = new ProxyReciver(m_port);
+		listener.listen();
 	}
 
 }

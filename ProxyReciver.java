@@ -1,11 +1,9 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.ServerSocket;
 import java.net.Socket;
 
 
-public class ProxyReciver implements Runnable {
+public class ProxyReciver {
 
 	private int m_port;
 	private static Logger m_logger = new Logger();
@@ -14,8 +12,7 @@ public class ProxyReciver implements Runnable {
 		m_port = port;
 	}
 
-	@Override
-	public void run() {
+	public void listen() {
 		
 		ServerSocket welcomeSocket = null;
 		Socket connectionSocket = null;
