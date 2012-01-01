@@ -1,3 +1,5 @@
+import java.io.FileNotFoundException;
+
 
 public class proxyServer {
 
@@ -9,21 +11,25 @@ public class proxyServer {
 	 */
 	public static void main(String[] args) {
 		
-//		if (args.length != 2) {
-//			errorLogger.log("Usege: proxyServer [port] [policy file]");
-//			System.exit(1);
-//		}
+		if (args.length != 2) {
+			errorLogger.log("Usege: proxyServer [port] [policy file]");
+			System.exit(1);
+		}
+		PolicyFile policyFile = null;
 		try {
 			m_port = Integer.parseInt(args[0]);
+			String policyFileName = args[1];
+			policyFile = new PolicyFile(policyFileName);
+			policyFile.parse();
 		}
 		catch (NumberFormatException nfe) {
 			errorLogger.log("Invalid port number");
+		} catch (FileNotFoundException fnfe) {
+			errorLogger.log("Can't find poicy file at: " + args[1]);
 		}
 		
-		//String policyFileName = args[1];
-		// TODO: open the policy file and read it...
-		
-		ProxyReciver listener = new ProxyReciver(m_port);
+
+		ProxyReciver listener = new ProxyReciver(m_port, policyFile);
 		listener.listen();
 	}
 

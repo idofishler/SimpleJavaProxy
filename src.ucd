@@ -16,7 +16,7 @@
     </sourceConnections>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showPackageAttributes="true" showStaticAttributes="true" showProtectedMethods="true" showPublicMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAttributeProperty="true" showAssociationMember="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0 //@children.3/@sourceConnections.1 //@children.4/@sourceConnections.0" name="Logger" location="105,345" size="148,157" id="/Logger" runTimeClassModel="logTo,Logger(Ljava.io.PrintStream;),log(Ljava.lang.String;),log(Ljava.lang.Exception;Ljava.lang.String;),Logger(),log(Ljava.lang.Exception;)">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.2/@sourceConnections.0 //@children.3/@sourceConnections.1 //@children.4/@sourceConnections.0" name="Logger" location="105,345" size="148,157" id="/Logger" runTimeClassModel="Logger(Ljava.io.PrintStream;),logTo,log(Ljava.lang.Exception;Ljava.lang.String;),log(Ljava.lang.String;),Logger(),log(Ljava.lang.Exception;)">
     <children xsi:type="editmodel:CompartmentEditModel" size="105,18">
       <children xsi:type="editmodel:AttributeEditModel" name="logTo" location="18,27" id="/Logger#logTo"/>
     </children>
@@ -30,15 +30,15 @@
     <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
     <classifierPreferences xsi:type="editmodel:UMLClassDiagramClassifierPreference" showMethodsParameterTypes="true" showMethodsReturnType="true" attributeSorter="Natural" methodSorter="Natural" innerClassSorter="Natural" showPrivateAttributes="true" showProtectedAttributes="true" showPublicAttributes="true" showProtectedMethods="true" showPublicMethods="true" showProtectedInnerClasses="true" showPublicInnerClasses="true" showStaticInnerClasses="true" packageIndication="3" showAssociationMember="true"/>
   </children>
-  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.3/@sourceConnections.2" name="RequestHeadersPresentor" location="915,270" size="259,139" id="/RequestHeadersPresentor" runTimeClassModel="m_logger,procces(),in,RequestHeadersPresentor(Ljava.io.BufferedReader;),out,RequestHeadersPresentor(Ljava.io.BufferedReader;Ljava.io.PrintWriter;)">
+  <children xsi:type="editmodel:ClassEditModel" targetConnections="//@children.3/@sourceConnections.2" name="RequestHeadersPresentor" location="915,270" size="259,139" id="/RequestHeadersProcessor" runTimeClassModel="procces(),m_logger,RequestHeadersPresentor(Ljava.io.BufferedReader;),in,RequestHeadersPresentor(Ljava.io.BufferedReader;Ljava.io.PrintWriter;),out">
     <children xsi:type="editmodel:CompartmentEditModel" size="111,54">
-      <children xsi:type="editmodel:AttributeEditModel" name="m_logger" id="/RequestHeadersPresentor#m_logger"/>
-      <children xsi:type="editmodel:AttributeEditModel" name="in" id="/RequestHeadersPresentor#in"/>
-      <children xsi:type="editmodel:AttributeEditModel" name="out" id="/RequestHeadersPresentor#out"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="m_logger" id="/RequestHeadersProcessor#m_logger"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="in" id="/RequestHeadersProcessor#in"/>
+      <children xsi:type="editmodel:AttributeEditModel" name="out" id="/RequestHeadersProcessor#out"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel" size="236,36">
-      <children xsi:type="editmodel:MethodEditModel" name="RequestHeadersPresentor" id="/RequestHeadersPresentor#RequestHeadersPresentor(Ljava.io.BufferedReader;)"/>
-      <children xsi:type="editmodel:MethodEditModel" name="procces" id="/RequestHeadersPresentor#procces()"/>
+      <children xsi:type="editmodel:MethodEditModel" name="RequestHeadersPresentor" id="/RequestHeadersProcessor#RequestHeadersProcessor(Ljava.io.BufferedReader;)"/>
+      <children xsi:type="editmodel:MethodEditModel" name="procces" id="/RequestHeadersProcessor#procces()"/>
     </children>
     <children xsi:type="editmodel:CompartmentEditModel" size="0,0"/>
     <sourceConnections xsi:type="editmodel:DependencyEditModel" autoLocated="true" id="/RequestHeadersPresentor->Soyatec::Import" source="//@children.2" target="//@children.1" targetEnd="//@children.2/@sourceConnections.0/@children.2" label="//@children.2/@sourceConnections.0/@children.0" sourceEnd="//@children.2/@sourceConnections.0/@children.1" connectionRouterKind="Manual">
