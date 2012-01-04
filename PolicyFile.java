@@ -125,6 +125,7 @@ public class PolicyFile {
 		} else if (BLOCK_RESOURCE.equalsIgnoreCase(attributs[0])) {     
 			blockedResorces.add(attributs[1].replaceAll("\"", ""));
 		}
+		// TODO change file
 	}
 	
 	/**
@@ -155,6 +156,7 @@ public class PolicyFile {
 				status = -1;
 			}
 		}
+		// TODO change file
 		return status;
 	}
 

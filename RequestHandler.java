@@ -88,10 +88,21 @@ public class RequestHandler implements Runnable {
 					return 2;
 				}
 			}
-
-			// Starting man in the middle and let it do it's job
-			ManInTheMiddle theMan = new ManInTheMiddle(host, port, rawRequest, m_socket);
-			theMan.go();
+			
+			if (url.toString().equalsIgnoreCase("http://content-proxy/management")) {
+				// TODO call dor's class
+			} 
+			else if (url.toString().equalsIgnoreCase("http://content-proxy/log")) {
+				// TODO: implement log page.
+			}
+			
+			
+			// normal proxy mode
+			else {
+				// Starting man in the middle and let it do it's job
+				ManInTheMiddle theMan = new ManInTheMiddle(host, port, rawRequest, m_socket);
+				theMan.go();				
+			}
 
 		}
 
