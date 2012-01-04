@@ -90,7 +90,8 @@ public class RequestHandler implements Runnable {
 			}
 			
 			if (url.toString().equalsIgnoreCase("http://content-proxy/management")) {
-				// TODO call dor's class
+				ManagementPage managementPage = new ManagementPage(m_socket, m_policyFile);
+				managementPage.go();
 			} 
 			else if (url.toString().equalsIgnoreCase("http://content-proxy/log")) {
 				// TODO: implement log page.
