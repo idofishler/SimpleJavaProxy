@@ -26,7 +26,6 @@ public class ResponseHeadersProcessor {
 
 		Hashtable<String, String> result = new Hashtable<String, String>();
 		StringBuilder rawResponse = new StringBuilder();
-		int CRLFcount = 0;
 		String inputLine;
 		try {
 			while ((inputLine = in.readLine()) != null) {
@@ -34,13 +33,7 @@ public class ResponseHeadersProcessor {
 				rawResponse.append(inputLine + "\n");
 
 				if ("".equalsIgnoreCase(inputLine)) {
-					boolean chunked = "chunked".equalsIgnoreCase(result.get("Transfer-Encoding"));
-					if (CRLFcount < 1 && chunked) {
-						CRLFcount++;
-						continue;
-					} else {
 						break;
-					}
 				}
 				
 				// first line handle
@@ -50,13 +43,6 @@ public class ResponseHeadersProcessor {
 					result.put(RESPONSE_CODE, firstLineArgs[1]);
 					result.put(RESPONSE_TEXT, firstLineArgs[2]);
 				} 
-				
-				// chunck size
-				else if (CRLFcount == 1) {
-					result.put(CHUNK_SIZE, inputLine);
-					break;
-				}
-
 
 				// other parameters
 				else {
@@ -90,15 +76,7 @@ public class ResponseHeadersProcessor {
 		}
 	}
 	
-	public int getCunckSize() {
-		if (m_headers.containsKey(CHUNK_SIZE)) {
-			return Integer.parseInt(m_headers.get(CHUNK_SIZE).trim(), 16);
-		} else {
-			return -1;
-		}
-	}
-	
-	public boolean isChuncked() {
+	public boolean isChunked() {
 		return "chunked".equalsIgnoreCase(m_headers.get("Transfer-Encoding"));
 	}
 	

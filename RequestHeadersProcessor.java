@@ -55,11 +55,6 @@ public class RequestHeadersProcessor {
 		.append("<B>Request query: </B>" + ((isPost) ? m_headers.get(QUERY) : url.getQuery()) + "<BR>\n")
 		.append("</body></html>");
 
-		// DEBUG **********************
-		System.out.println(result);
-		System.out.println("RequestHeaderPresentor Done!");
-		// DEBUG **********************
-
 		return result.toString();
 	}
 
@@ -119,7 +114,6 @@ public class RequestHeadersProcessor {
 		
 		// debug
 		m_logger.log("RawRequest:\n" + m_rawRequest);
-		m_logger.log("==========================================");
 
 		return result;
 	}

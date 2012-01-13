@@ -20,7 +20,6 @@ public class proxyServer {
 			m_port = Integer.parseInt(args[0]);
 			String policyFileName = args[1];
 			policyFile = new PolicyFile(policyFileName);
-			policyFile.parse();
 		}
 		catch (NumberFormatException nfe) {
 			errorLogger.log("Invalid port number");

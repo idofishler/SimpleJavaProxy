@@ -1,15 +1,20 @@
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.xml.ws.Response;
+
 
 public class ManInTheMiddle {
 
-	private static final int MAX_PACKET_SIZE = 10000;
+	private static final int MAX_PACKET_SIZE = 100000;
 	private InputStream hostInStream, clientInStream;
 	private OutputStream hostOutStream, clientOutStream;
+	private BufferedReader hostBufferedInputStream;
 	private String host;
 	private int port;
 	private Socket clientSocket, hostSocket;
@@ -23,12 +28,89 @@ public class ManInTheMiddle {
 		this.clientSocket = clientSocket;
 	}
 
+	public void go() {
+
+		openHostSocket();
+		openClientStreams();
+		//forwardFirstRequestToHost();
+		//processResponseHeaders();
+		
+		int dataToRead = 0, dataBeenRead = 0;
+
+		// TODO handle additional request to the same host??
+
+		try {
+			
+			hostOutStream.write(firstRequest.getBytes(), 0, firstRequest.getBytes().length);
+			m_logger.log("Forwarding request to host....\n");
+			hostOutStream.flush();
+
+			ResponseHeadersProcessor responseHeadersProcessor = 
+				new ResponseHeadersProcessor(hostBufferedInputStream);
+
+			String rawResponseHeaders = responseHeadersProcessor.getRawResponse();
+			m_logger.log("RawResponseHeaders:\n" + rawResponseHeaders);
+
+			if (responseHeadersProcessor.isChunked()) {
+				dataToRead = getNextChunkSize();
+			} else {
+				dataToRead = responseHeadersProcessor.getContentLength();
+			}
+
+			byte[] buffer;
+
+
+			while (dataToRead != 0) {
+				
+				m_logger.log("Data to read: " + dataToRead);
+
+				buffer = new byte[dataToRead];
+
+				while (dataBeenRead <  dataToRead) {
+					buffer[dataBeenRead++] = (byte) hostInStream.read();
+				}
+				
+				m_logger.log("Forwarding: " + dataBeenRead + " bytes");
+				clientOutStream.write(buffer);
+				clientOutStream.flush();
+				
+				// reset counters for next chunk
+				dataBeenRead = 0;
+				dataToRead = getNextChunkSize();
+			}
+			hostSocket.close();	
+		} 
+		
+		catch (IOException e) {
+			m_logger.log(e);
+		}
+	}
+
+	private int getNextChunkSize() throws IOException {
+		StringBuilder sb = new StringBuilder();
+		char nextChar;
+		nextChar = (char) hostInStream.read();
+		while (Character.isWhitespace(nextChar)) {
+			// skip
+			nextChar = (char) hostInStream.read();
+		}
+		
+		// read chunk size until next CRLF
+		while (!Character.isWhitespace(nextChar)) {
+			sb.append(nextChar);
+			nextChar = (char) hostInStream.read();
+		}
+		return Integer.parseInt(sb.toString(), 16);
+	}
+
 	private void openHostSocket() { 
 
 		try {
 			hostSocket = new Socket(host, port);
 			hostOutStream = hostSocket.getOutputStream();
 			hostInStream = hostSocket.getInputStream();	
+			hostBufferedInputStream = new BufferedReader(
+					new InputStreamReader(hostInStream));
 		} catch (UnknownHostException e) {
 			m_logger.log(e, "Don't know about host: " + host);
 		} catch (IOException e) {
@@ -44,40 +126,6 @@ public class ManInTheMiddle {
 		} catch (IOException e) {
 			m_logger.log(e, "Couldn't get I/O for "
 					+ "the connection to: " + host);
-		}
-	}
-
-	public void go() {
-
-		openHostSocket();
-		openClientStreams();
-
-		byte[] buffer = new byte[MAX_PACKET_SIZE];
-		try {
-			// TODO handle additional request to the same host
-			int n = 0; //clientInStream.read(buffer);
-			
-			hostOutStream.write(firstRequest.getBytes(), 0, firstRequest.getBytes().length);
-			m_logger.log("Forwarding request to host");
-			hostOutStream.flush();
-			
-			do {
-				n = hostInStream.read(buffer);
-				
-				// DEBUG
-				System.out.println("Reciving " + n + " bytes");
-				
-				if (n > 0) {
-					clientOutStream.write(buffer, 0, n);
-				} 
-			} while (n > 0);
-			
-			clientOutStream.flush();
-			
-			hostSocket.close();
-			
-		} catch (IOException e) {
-			m_logger.log(e, "Problem with communication between browser and host");
 		}
 	}
 }
