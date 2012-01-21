@@ -73,7 +73,7 @@ public class RequestHeadersProcessor {
 			while ((inputLine = in.readLine()) != null) {
 
 				// DEBUG
-				rawRequest.append(inputLine + "\n");
+				rawRequest.append(inputLine + proxyServer.CRLF);
 
 				// knows when request is over
 				if ("".equalsIgnoreCase(inputLine)) {
@@ -110,7 +110,7 @@ public class RequestHeadersProcessor {
 			m_logger.log(ioe);
 		}
 
-		m_rawRequest = rawRequest.toString();
+		m_rawRequest = rawRequest.toString() + proxyServer.CRLF;
 		
 		// debug
 		m_logger.log("RawRequest:\n" + m_rawRequest);

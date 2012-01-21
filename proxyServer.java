@@ -3,6 +3,8 @@ import java.io.FileNotFoundException;
 
 public class proxyServer {
 
+	public static final String CRLF = "\r\n";
+	
 	private static Logger errorLogger = new Logger(System.err);
 	private static int m_port;
 	

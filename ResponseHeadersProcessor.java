@@ -30,7 +30,7 @@ public class ResponseHeadersProcessor {
 		try {
 			while ((inputLine = in.readLine()) != null) {
 
-				rawResponse.append(inputLine + "\n");
+				rawResponse.append(inputLine + proxyServer.CRLF);
 
 				if ("".equalsIgnoreCase(inputLine)) {
 						break;

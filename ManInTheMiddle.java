@@ -50,19 +50,23 @@ public class ManInTheMiddle {
 
 			String rawResponseHeaders = responseHeadersProcessor.getRawResponse();
 			m_logger.log("RawResponseHeaders:\n" + rawResponseHeaders);
+			
+			//send response header back to client
+			m_logger.log("Forwarfing response headers to client...");
+			clientOutStream.write(rawResponseHeaders.getBytes());
+			clientOutStream.flush();
 
 			if (responseHeadersProcessor.isChunked()) {
 				dataToRead = getNextChunkSize();
 			} else {
 				dataToRead = responseHeadersProcessor.getContentLength();
 			}
-
+			
 			byte[] buffer;
-
 
 			while (dataToRead != 0) {
 				
-				m_logger.log("Data to read: " + dataToRead);
+				m_logger.log("Data to read: " + dataToRead++);
 
 				buffer = new byte[dataToRead];
 
@@ -87,20 +91,24 @@ public class ManInTheMiddle {
 	}
 
 	private int getNextChunkSize() throws IOException {
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sbCunckSize = new StringBuilder();
+		StringBuilder orinal = new StringBuilder();
 		char nextChar;
 		nextChar = (char) hostInStream.read();
 		while (Character.isWhitespace(nextChar)) {
-			// skip
+			orinal.append(nextChar);
 			nextChar = (char) hostInStream.read();
 		}
 		
 		// read chunk size until next CRLF
 		while (!Character.isWhitespace(nextChar)) {
-			sb.append(nextChar);
+			sbCunckSize.append(nextChar);
+			orinal.append(nextChar);
 			nextChar = (char) hostInStream.read();
 		}
-		return Integer.parseInt(sb.toString(), 16);
+		clientOutStream.write(orinal.toString().getBytes());
+		clientOutStream.flush();
+		return Integer.parseInt(sbCunckSize.toString(), 16);
 	}
 
 	private void openHostSocket() { 

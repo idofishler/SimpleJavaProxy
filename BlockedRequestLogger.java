@@ -9,7 +9,7 @@ public class BlockedRequestLogger {
 		log = new StringBuilder();
 	}
 
-	public static BlockedRequestLogger getInstance() {
+	public static synchronized BlockedRequestLogger getInstance() {
 		if(instance == null) {
 			instance = new BlockedRequestLogger();
 		}
