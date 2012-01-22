@@ -1,5 +1,6 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
@@ -31,8 +32,7 @@ public class RequestHandler implements Runnable {
 	@Override
 	public void run() {
 		try {
-			BufferedReader inputStream = new BufferedReader(
-					new InputStreamReader(m_socket.getInputStream()));
+			InputStream inputStream = m_socket.getInputStream();
 			PrintWriter outputStream = new PrintWriter(
 			m_socket.getOutputStream(), true);
 			
@@ -72,11 +72,11 @@ public class RequestHandler implements Runnable {
 		}
 	}
 
-	private int readRequest(BufferedReader inputStream) throws IOException {
+	private int readRequest(InputStream inputStream) throws IOException {
 	
-		inputStream.mark(15000);
+		//inputStream.mark(15000);
 		m_headersProcessor = new RequestHeadersProcessor(inputStream);
-		inputStream.reset();
+		//inputStream.reset();
 	
 		m_headers = m_headersProcessor.getRequestHeaders();
 	
@@ -95,6 +95,7 @@ public class RequestHandler implements Runnable {
 			}
 			
 			URL url = new URL(m_headers.get(RequestHeadersProcessor.URL));
+			String host = url.getHost();
 			if (url.toString().equalsIgnoreCase("http://content-proxy/management")) {
 				return MANAGEMENT;
 			}
@@ -130,7 +131,8 @@ public class RequestHandler implements Runnable {
 	private void showManagementPage() {
 		// TODO change management page to receive input and output stream and not socket
 		ManagementPage managementPage = new ManagementPage(m_socket, m_policyFile);
-		managementPage.go();
+		String query = m_headers.get(RequestHeadersProcessor.QUERY);
+		managementPage.go(query);
 	}
 
 	private void showLogPage() throws IOException {

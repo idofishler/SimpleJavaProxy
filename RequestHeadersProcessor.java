@@ -1,11 +1,14 @@
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.sql.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
+
+import javax.sound.sampled.Line;
 
 
 public class RequestHeadersProcessor {
@@ -16,13 +19,16 @@ public class RequestHeadersProcessor {
 	public static final String PROTOCOL = "protocol";
 	public static final String POST = "POST";
 	public static final String GET = "GET";
+	public static final Object CONTENT_LENGTH = "Content-Length";
+	
+	private static final String CRLF = proxyServer.CRLF;
 
-	private BufferedReader in;
+	private InputStream in;
 	private static Logger m_logger = new Logger();
 	private Hashtable<String, String> m_headers;
 	private String m_rawRequest;
 
-	public RequestHeadersProcessor(BufferedReader inputStream) {
+	public RequestHeadersProcessor(InputStream inputStream) {
 		in = inputStream;
 		m_headers = getRequestHeaders();
 	}
@@ -67,50 +73,57 @@ public class RequestHeadersProcessor {
 
 		Hashtable<String, String> result = new Hashtable<String, String>();
 		StringBuilder rawRequest = new StringBuilder();
+		StringBuilder nextLine = new StringBuilder(); 
+		String method;
 		int CRLFcount = 0;
 		try {
-			String inputLine, method;
-			while ((inputLine = in.readLine()) != null) {
+			char nextChar;
+			String line;
+			// TODO fix post handling.
+			while ((nextChar = (char) in.read()) != -1) {
 
-				// DEBUG
-				rawRequest.append(inputLine + proxyServer.CRLF);
-
-				// knows when request is over
-				if ("".equalsIgnoreCase(inputLine)) {
+				rawRequest.append(nextChar);
+				nextLine.append(nextChar);
+				
+				// find end of request
+				if (rawRequest.toString().endsWith(CRLF+CRLF)) {
 					method = result.get(METHOD);
-					if (CRLFcount < 1 && method != null && method.equalsIgnoreCase(POST)) {
-						CRLFcount++;
-						continue;
+					if (POST.equalsIgnoreCase(method)) {
+						int dataLen = Integer.parseInt(result.get(CONTENT_LENGTH));
+						String postData = getPostData(dataLen);
+						result.put(QUERY, postData);
+						break;
 					} else {
 						break;
 					}
-
-					// First line handler
-				} else if (inputLine.contains(GET) || inputLine.contains(POST)){
-					String[] firstLineArgs = inputLine.split(" ");
-					result.put(METHOD, firstLineArgs[0]);
-					result.put(URL, firstLineArgs[1]);
-					result.put(PROTOCOL, firstLineArgs[2]);
-
-					// query part of POST
-				} else if (CRLFcount == 1) {
-					result.put(QUERY, inputLine);
-
-					// other parameters
-				} else {
-					String[] parametr = inputLine.split(": ");
-					if (parametr.length == 2) {
-						result.put(parametr[0], parametr[1]);						
-					} else {
-						result.put(inputLine, inputLine);
+				}
+				
+				// after reading a full line
+				else if ((line = nextLine.toString()).endsWith(CRLF)) {
+					// TODO throw exception for connect requests...
+					if (line.contains(GET) || line.contains(POST)) {
+						String[] firstLineArgs = line.split(" ");
+						result.put(METHOD, firstLineArgs[0]);
+						result.put(URL, firstLineArgs[1]);
+						result.put(PROTOCOL, firstLineArgs[2].trim());
+					} 
+					else {
+						String[] parametr = line.split(": ");
+						if (parametr.length == 2) {
+							result.put(parametr[0], parametr[1].trim());						
+						} else {
+							result.put(line.trim(), line.trim());
+						}
 					}
-				}	
+					// reset nextLine
+					nextLine = new StringBuilder();
+				}
 			}
 		} catch (IOException ioe) {
 			m_logger.log(ioe);
 		}
 
-		m_rawRequest = rawRequest.toString() + proxyServer.CRLF;
+		m_rawRequest = rawRequest.toString();
 		
 		// debug
 		m_logger.log("RawRequest:\n" + m_rawRequest);
@@ -141,6 +154,14 @@ public class RequestHeadersProcessor {
 	
 	public String getRawRequest() {
 		return m_rawRequest;
+	}
+
+	private String getPostData(int data) throws IOException {
+		char[] query = new char[data];
+		for (int i = 0; i < data; i++) {
+			query[i] = (char) in.read();
+		}
+		return new String(query);
 	}
 
 	private String getHeadersTable() {

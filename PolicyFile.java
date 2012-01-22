@@ -178,12 +178,13 @@ public class PolicyFile {
 		for (String rule : blockedResorces) {
 			out.write(BLOCK_RESOURCE + " \"" + rule + "\"\n");
 		}
+		out.close();
 	}
 
 	private int findRulePos(ArrayList<String> rules, String value) {
 		int pos = -1;
-		for (int index = 0; index < blockedHosts.size(); index++) {
-			if (blockedHosts.get(index).equalsIgnoreCase(value)) {
+		for (int index = 0; index < rules.size(); index++) {
+			if (rules.get(index).equalsIgnoreCase(value)) {
 				pos = index;
 			}
 		}
