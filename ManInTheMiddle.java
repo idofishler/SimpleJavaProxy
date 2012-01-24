@@ -1,20 +1,14 @@
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-import javax.xml.ws.Response;
-
 
 public class ManInTheMiddle {
 
-	private static final int MAX_PACKET_SIZE = 100000;
 	private InputStream hostInStream, clientInStream;
 	private OutputStream hostOutStream, clientOutStream;
-	private BufferedReader hostBufferedInputStream;
 	private String host;
 	private int port;
 	private Socket clientSocket, hostSocket;
@@ -66,7 +60,9 @@ public class ManInTheMiddle {
 
 			while (dataToRead > 0) {
 				
-				dataToRead += proxyServer.CRLF.length();
+				if (responseHeadersProcessor.isChunked()) {
+					dataToRead += proxyServer.CRLF.length();					
+				}
 				
 				m_logger.log("Data to read: " + dataToRead);
 
@@ -85,6 +81,7 @@ public class ManInTheMiddle {
 				
 				dataToRead = (responseHeadersProcessor.isChunked())? getNextChunkSize() : 0;
 			}
+			hostOutStream.flush();
 			hostSocket.close();	
 		} 
 		
@@ -115,8 +112,6 @@ public class ManInTheMiddle {
 			hostSocket = new Socket(host, port);
 			hostOutStream = hostSocket.getOutputStream();
 			hostInStream = hostSocket.getInputStream();	
-			hostBufferedInputStream = new BufferedReader(
-					new InputStreamReader(hostInStream));
 		} catch (UnknownHostException e) {
 			m_logger.log(e, "Don't know about host: " + host);
 		} catch (IOException e) {
