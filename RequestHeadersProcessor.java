@@ -74,12 +74,10 @@ public class RequestHeadersProcessor {
 		Hashtable<String, String> result = new Hashtable<String, String>();
 		StringBuilder rawRequest = new StringBuilder();
 		StringBuilder nextLine = new StringBuilder(); 
-		String method;
-		int CRLFcount = 0;
+		String method, line;
+		char nextChar;
+		
 		try {
-			char nextChar;
-			String line;
-			// TODO fix post handling.
 			while ((nextChar = (char) in.read()) != -1) {
 
 				rawRequest.append(nextChar);

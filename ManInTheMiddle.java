@@ -46,7 +46,7 @@ public class ManInTheMiddle {
 			hostOutStream.flush();
 
 			ResponseHeadersProcessor responseHeadersProcessor = 
-				new ResponseHeadersProcessor(hostBufferedInputStream);
+				new ResponseHeadersProcessor(hostInStream);
 
 			String rawResponseHeaders = responseHeadersProcessor.getRawResponse();
 			m_logger.log("RawResponseHeaders:\n" + rawResponseHeaders);
@@ -64,9 +64,11 @@ public class ManInTheMiddle {
 			
 			byte[] buffer;
 
-			while (dataToRead != 0) {
+			while (dataToRead > 0) {
 				
-				m_logger.log("Data to read: " + dataToRead++);
+				dataToRead += proxyServer.CRLF.length();
+				
+				m_logger.log("Data to read: " + dataToRead);
 
 				buffer = new byte[dataToRead];
 
@@ -80,7 +82,8 @@ public class ManInTheMiddle {
 				
 				// reset counters for next chunk
 				dataBeenRead = 0;
-				dataToRead = getNextChunkSize();
+				
+				dataToRead = (responseHeadersProcessor.isChunked())? getNextChunkSize() : 0;
 			}
 			hostSocket.close();	
 		} 
@@ -92,23 +95,18 @@ public class ManInTheMiddle {
 
 	private int getNextChunkSize() throws IOException {
 		StringBuilder sbCunckSize = new StringBuilder();
-		StringBuilder orinal = new StringBuilder();
 		char nextChar;
-		nextChar = (char) hostInStream.read();
-		while (Character.isWhitespace(nextChar)) {
-			orinal.append(nextChar);
-			nextChar = (char) hostInStream.read();
-		}
 		
-		// read chunk size until next CRLF
-		while (!Character.isWhitespace(nextChar)) {
+		while ((nextChar = (char) hostInStream.read()) != -1) {
+			
 			sbCunckSize.append(nextChar);
-			orinal.append(nextChar);
-			nextChar = (char) hostInStream.read();
+			clientOutStream.write(nextChar);
+			
+			if (sbCunckSize.toString().endsWith(proxyServer.CRLF)) {
+				return Integer.parseInt(sbCunckSize.toString().trim(), 16);
+			}
 		}
-		clientOutStream.write(orinal.toString().getBytes());
-		clientOutStream.flush();
-		return Integer.parseInt(sbCunckSize.toString(), 16);
+		return -1;
 	}
 
 	private void openHostSocket() { 
