@@ -8,9 +8,12 @@ public class ResponseHeadersProcessor {
 	private static final String PROTOCOL = "protocol";
 	private static final String RESPONSE_CODE = "response_code";
 	private static final String RESPONSE_TEXT = "response_text";
-	private static final String CHUNK_SIZE = "chunk_size";
-	private static Logger m_logger = new Logger();
 	private static final String CRLF = proxyServer.CRLF;
+	private static final String CONNECTION = "Connection";
+	private static final String CLOSE = "close";
+	
+	private static Logger m_logger = new Logger();
+	private static Logger m_errorLogger = new Logger(System.err);
 
 	private InputStream in;
 	private Hashtable<String, String> m_headers;
@@ -29,7 +32,7 @@ public class ResponseHeadersProcessor {
 		Hashtable<String, String> result = new Hashtable<String, String>();
 		StringBuilder rawResponse = new StringBuilder();
 		StringBuilder nextLine = new StringBuilder(); 
-		String method, line;
+		String line;
 		char nextChar;
 		
 		try {
@@ -67,7 +70,7 @@ public class ResponseHeadersProcessor {
 			}
 			
 		} catch (IOException e) {
-			m_logger.log(e);
+			m_errorLogger.log(e);
 		}
 		
 		m_rawResponse = rawResponse.toString();
@@ -79,16 +82,37 @@ public class ResponseHeadersProcessor {
 	}
 	
 	public int getContentLength() {
+		int result = -1;
 		if (m_headers.containsKey("Content-Length")) {
-			return Integer.parseInt(m_headers.get("Content-Length").trim());			
-		} else {
-			return -1;
+			try {
+				result = Integer.parseInt(m_headers.get("Content-Length").trim());							
+			} catch (NumberFormatException nfe) {
+				m_errorLogger.log("Faild to parse content length");
+			}
 		}
+		return result;
 	}
 	
 	public boolean isChunked() {
 		if (m_headers.containsKey("Transfer-Encoding")) {
 			return "chunked".equalsIgnoreCase(m_headers.get("Transfer-Encoding").trim());
+		}
+		return false;
+	}
+	
+	public int getResponseCode() {
+		int result = -1;
+		try {
+			result = Integer.parseInt(m_headers.get(RESPONSE_CODE).trim());			
+		} catch (NumberFormatException nfe) {
+			m_errorLogger.log("Fail to parse response code");
+		}
+		return result;
+	}
+
+	public boolean isCloseConnection() {
+		if (m_headers.containsKey(CONNECTION) && CLOSE.equalsIgnoreCase(m_headers.get(CONNECTION))) {
+			return true;
 		}
 		return false;
 	}

@@ -9,6 +9,7 @@ public class ProxyReciver {
 	private PolicyFile m_policyFile;
 
 	private static Logger m_logger = new Logger();
+	private static Logger m_errorLogger = new Logger(System.err);
 
 	public ProxyReciver(int port, PolicyFile policyFile) {
 		m_port = port;
@@ -23,13 +24,13 @@ public class ProxyReciver {
 			welcomeSocket = new ServerSocket(m_port);
 			m_logger.log("Listening on Socket: " + m_port + "\n");
 		} catch (IOException ioe) {
-			m_logger.log(ioe, "Problem with welcome socket");
+			m_errorLogger.log(ioe, "Problem with welcome socket");
 		}
 		while (true) {
 			try {
 				connectionSocket = welcomeSocket.accept();
 			} catch (IOException e) {
-				m_logger.log(e, "Problem with connetction socket: " + connectionSocket.toString());
+				m_errorLogger.log(e, "Problem with connetction socket: " + connectionSocket.toString());
 			}
 			// the request handler will close the clientSocket when finish
 			RequestHandler requestHandler = new RequestHandler(connectionSocket, m_policyFile);

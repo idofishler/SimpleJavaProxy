@@ -1,4 +1,3 @@
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -7,8 +6,6 @@ import java.sql.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.StringTokenizer;
-
-import javax.sound.sampled.Line;
 
 
 public class RequestHeadersProcessor {
@@ -19,12 +16,14 @@ public class RequestHeadersProcessor {
 	public static final String PROTOCOL = "protocol";
 	public static final String POST = "POST";
 	public static final String GET = "GET";
-	public static final Object CONTENT_LENGTH = "Content-Length";
+	public static final String HOST = "Host";
+	public static final Object CONTENT_LENGTH = "Content-length";
 	
 	private static final String CRLF = proxyServer.CRLF;
 
 	private InputStream in;
 	private static Logger m_logger = new Logger();
+	private static Logger m_Errorlogger = new Logger(System.err);
 	private Hashtable<String, String> m_headers;
 	private String m_rawRequest;
 
@@ -87,9 +86,10 @@ public class RequestHeadersProcessor {
 				if (rawRequest.toString().endsWith(CRLF+CRLF)) {
 					method = result.get(METHOD);
 					if (POST.equalsIgnoreCase(method)) {
-						int dataLen = Integer.parseInt(result.get(CONTENT_LENGTH));
+						int dataLen = getContentLength(result);
 						String postData = getPostData(dataLen);
 						result.put(QUERY, postData);
+						rawRequest.append(postData);
 						break;
 					} else {
 						break;
@@ -118,14 +118,26 @@ public class RequestHeadersProcessor {
 				}
 			}
 		} catch (IOException ioe) {
-			m_logger.log(ioe);
+			m_Errorlogger.log(ioe);
 		}
 
 		m_rawRequest = rawRequest.toString();
 		
-		// debug
 		m_logger.log("RawRequest:\n" + m_rawRequest);
 
+		return result;
+	}
+
+	private int getContentLength(Hashtable<String, String> headers) {
+		int result = 0;
+		try {
+			if (headers.containsKey(CONTENT_LENGTH)) {
+				result = Integer.parseInt(headers.get(CONTENT_LENGTH).trim());				
+			}
+		} catch (NumberFormatException nfe) {
+			m_Errorlogger.log("Failed to get content length of " +
+					"request to" + getHost());
+		}
 		return result;
 	}
 
@@ -152,6 +164,14 @@ public class RequestHeadersProcessor {
 	
 	public String getRawRequest() {
 		return m_rawRequest;
+	}
+	
+	public String getHost() {
+		String result = "";
+		if (m_headers.containsKey(HOST)) {
+			result = m_headers.get(HOST);
+		}
+		return result;
 	}
 
 	private String getPostData(int data) throws IOException {

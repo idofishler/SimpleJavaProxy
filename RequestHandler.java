@@ -1,7 +1,6 @@
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.PrintWriter;
 import java.net.MalformedURLException;
 import java.net.Socket;
@@ -22,7 +21,9 @@ public class RequestHandler implements Runnable {
 	private PolicyFile m_policyFile;
 	private Hashtable<String, String> m_headers;
 	private RequestHeadersProcessor m_headersProcessor;
+	private ManInTheMiddle m_manInTheMiddle;
 	private static Logger m_logger = new Logger();
+	private static Logger m_errorLogger = new Logger(System.err);
 
 	public RequestHandler(Socket connectionSocket, PolicyFile policyFile) {
 		m_socket = connectionSocket;
@@ -33,57 +34,63 @@ public class RequestHandler implements Runnable {
 	public void run() {
 		try {
 			InputStream inputStream = m_socket.getInputStream();
-			PrintWriter outputStream = new PrintWriter(
-			m_socket.getOutputStream(), true);
+			OutputStream outputStream = m_socket.getOutputStream();
+			PrintWriter printWriter = new PrintWriter(outputStream, true);
 			
-			// use status to keep persistency.
-			int status = readRequest(inputStream);
-			
-			switch (status) {
-			
-			case FORBIDDEN:
-				show403page(outputStream);
-				break;
-			case SHOW_HEADERS:
-				showHeadersPage(outputStream);
-				break;
-			case MANAGEMENT:
-				showManagementPage();
-				break;
-			case LOG:
-				showLogPage();
-				break;
-			case MAN_IN_THE_MIDDLE:
-				doManInTheMiddle();
-				break;
+			m_manInTheMiddle = new ManInTheMiddle(inputStream, outputStream);
 
-			default:
-				m_logger.log("Could not handle request");
+			int status;
+
+			while (m_socket.isConnected()) {
+				
+				status = readRequest(inputStream);
+				
+				switch (status) {
+
+				case FORBIDDEN:
+					show403page(printWriter);
+					break;
+				case SHOW_HEADERS:
+					showHeadersPage(printWriter);
+					break;
+				case MANAGEMENT:
+					showManagementPage();
+					break;
+				case LOG:
+					showLogPage();
+					break;
+				case MAN_IN_THE_MIDDLE:
+					doManInTheMiddle();
+					break;
+
+				default:
+					m_logger.log("Could not handle request");
+				}
 			}
+			
 
 			m_socket.close();
 			m_logger.log("End of comunication");
 			m_logger.log("===========================================================");
 
 		} catch (MalformedURLException e) {
-			m_logger.log(e, "Problem with the URL");
+			m_errorLogger.log(e, "Problem with the URL");
 		} catch (IOException ioe) {
-			m_logger.log(ioe);
+			m_errorLogger.log(ioe);
 		}
 	}
 
 	private int readRequest(InputStream inputStream) throws IOException {
-	
-		//inputStream.mark(15000);
+
 		m_headersProcessor = new RequestHeadersProcessor(inputStream);
-		//inputStream.reset();
-	
+
+		// load this fields here
 		m_headers = m_headersProcessor.getRequestHeaders();
-	
+
 		if (isShowDeatails()) {
 			return SHOW_HEADERS;
 		}
-	
+
 		// showDetails is OFF
 		else {
 
@@ -93,17 +100,17 @@ public class RequestHandler implements Runnable {
 				logForbiddenRequest(rule);
 				return FORBIDDEN;
 			}
-			
+
 			URL url = new URL(m_headers.get(RequestHeadersProcessor.URL));
 			String host = url.getHost();
 			if (url.toString().equalsIgnoreCase("http://content-proxy/management")) {
 				return MANAGEMENT;
 			}
-			
+
 			else if (url.toString().equalsIgnoreCase("http://content-proxy/log")) {
 				return LOG;
 			}
-	
+
 			// normal proxy mode
 			else {
 				return MAN_IN_THE_MIDDLE;
@@ -118,13 +125,13 @@ public class RequestHandler implements Runnable {
 
 	private void show403page(PrintWriter outputStream) {
 		StringBuilder result = new StringBuilder();
-	
+
 		result.append("<html>\n<body>\n")
 		.append("<h1>HTTP Status 403 - Access is denied</h1>\n")
 		.append("</body>\n</html>");
-	
+
 		outputStream.println(result);
-	
+
 		outputStream.flush();
 	}
 
@@ -152,24 +159,24 @@ public class RequestHandler implements Runnable {
 	}
 
 	private void doManInTheMiddle() throws MalformedURLException {
-		
+
 		// Getting the information needed for making a decision
 		String rawRequest = m_headersProcessor.getRawRequest();
 		URL url = new URL(m_headers.get(RequestHeadersProcessor.URL));
 		String host = url.getHost();
 		int port = url.getPort();
 		if (port == -1) port = 80;
-		
+
 		// Starting man in the middle and let it do it's job
-		ManInTheMiddle theMan = new ManInTheMiddle(host, port, rawRequest, m_socket);
-		theMan.go();
+		
+		m_manInTheMiddle.go(host, port, rawRequest);
 	}
 
 	private String isForbbiden() throws MalformedURLException {
 		URL url = new URL(m_headers.get(RequestHeadersProcessor.URL));
 		String host = url.getHost();
 		String path = url.getPath();
-		
+
 		// Policy checks
 		for (String rule : m_policyFile.getBlockedHosts()) {
 			if (rule.contains(host)) {

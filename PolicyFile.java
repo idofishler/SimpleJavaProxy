@@ -61,7 +61,7 @@ public class PolicyFile {
 	public static final String BLOCK_SITE = "block-site";
 	public static final String BLOCK_RESOURCE = "block-resource";
 	
-	private static Logger m_logger = new Logger();
+	private static Logger m_errorLogger = new Logger(System.err);
 	private File policyFile;
 	private ArrayList<String> blockedHosts;
 	private ArrayList<String> blockedResorces;
@@ -156,7 +156,7 @@ public class PolicyFile {
 			}
 		}
 		catch (IOException ex){
-			m_logger.log(ex, "Problem with parsing policy file");
+			m_errorLogger.log(ex, "Problem with parsing policy file");
 		}
 	}
 
