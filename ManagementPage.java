@@ -71,10 +71,9 @@ public class ManagementPage {
 		}
 		else
 		{
-			if ( !ruleType.equals(BLOCK_SITE) && !ruleType.equals(BLOCK_RESOURCE)
-					&& !(ruleValue.startsWith("\"") && ruleValue.endsWith("\"")))
-			{
-				malformed = true;
+			if ((!ruleType.equals(BLOCK_SITE) && !ruleType.equals(BLOCK_RESOURCE)) ||
+					!(ruleValue.startsWith("\"") && ruleValue.endsWith("\""))) {
+					malformed = true;					
 			}
 		}
 		return malformed;

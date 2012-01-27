@@ -25,8 +25,10 @@ public class proxyServer {
 		}
 		catch (NumberFormatException nfe) {
 			errorLogger.log("Invalid port number");
+			System.exit(2);
 		} catch (FileNotFoundException fnfe) {
 			errorLogger.log("Can't find poicy file at: " + args[1]);
+			System.exit(3);
 		}
 		
 

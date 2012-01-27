@@ -41,7 +41,7 @@ public class RequestHandler implements Runnable {
 
 			int status;
 
-			while (m_socket.isConnected()) {
+			client: while (m_socket.isConnected()) {
 				
 				status = readRequest(inputStream);
 				
@@ -49,22 +49,23 @@ public class RequestHandler implements Runnable {
 
 				case FORBIDDEN:
 					show403page(printWriter);
-					break;
+					break client;
 				case SHOW_HEADERS:
 					showHeadersPage(printWriter);
-					break;
+					break client;
 				case MANAGEMENT:
 					showManagementPage();
-					break;
+					break client;
 				case LOG:
 					showLogPage();
-					break;
+					break client;
 				case MAN_IN_THE_MIDDLE:
 					doManInTheMiddle();
 					break;
 
 				default:
 					m_logger.log("Could not handle request");
+					break;
 				}
 			}
 			

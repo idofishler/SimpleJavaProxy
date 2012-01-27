@@ -17,7 +17,7 @@ public class RequestHeadersProcessor {
 	public static final String POST = "POST";
 	public static final String GET = "GET";
 	public static final String HOST = "Host";
-	public static final Object CONTENT_LENGTH = "Content-length";
+	public static final String CONTENT_LENGTH = "Content-Length";
 	
 	private static final String CRLF = proxyServer.CRLF;
 

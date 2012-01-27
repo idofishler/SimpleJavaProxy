@@ -4,6 +4,8 @@ import java.io.OutputStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.swing.text.AbstractDocument.BranchElement;
+
 
 public class ManInTheMiddle {
 
@@ -105,7 +107,8 @@ public class ManInTheMiddle {
 
 			if (sbCunckSize.toString().endsWith(proxyServer.CRLF)) {
 				try {
-					result = Integer.parseInt(sbCunckSize.toString().trim(), 16);					
+					result = Integer.parseInt(sbCunckSize.toString().trim(), 16);
+					break;
 				} catch (NumberFormatException nfe) {
 					m_logger.log("can't parse chunck size");
 				}
